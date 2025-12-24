@@ -35,6 +35,7 @@ public class ControladorJuego implements ActionListener{
             );
 
             if (respuesta == JOptionPane.YES_OPTION) {
+                panelJuego.getGameLoop().detener();
                 panelMenu = new PanelMenu();
                 controladorMenu = new ControladorMenu(panelMenu);
             }
