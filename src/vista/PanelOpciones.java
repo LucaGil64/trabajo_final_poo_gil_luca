@@ -79,7 +79,7 @@ public class PanelOpciones extends JPanel{
         wasdK = new JRadioButton();
 
         flechasF.setBackground(Color.BLACK);
-        flechasF.setSelected(true);
+        flechasF.setSelected(true); System.out.println("soy panel");
 
         wasdK.setBackground(Color.BLACK);        
 
@@ -103,6 +103,18 @@ public class PanelOpciones extends JPanel{
         this.add(contenedorControles);
         
 
+    }
+
+    public JSlider getSliderVolumen() {
+        return this.sliderVolumen;
+    }
+
+    public JRadioButton getBotonFlechasF() {
+        return this.flechasF;
+    }
+
+    public JRadioButton getBotonWasdK() {
+        return this.wasdK;
     }
 
 }
