@@ -1,7 +1,12 @@
 package vista;
 
+import controlador.ControladorInput;
 import java.awt.*;
 import javax.swing.*;
+import modelo.GameLoop;
+import modelo.Mapa;
+import modelo.Niveles;
+import modelo.entidad.jugador.TanqueJugador;
 
 public class PanelJuego extends JPanel{
 
@@ -9,7 +14,8 @@ public class PanelJuego extends JPanel{
     private JButton botonMenu;
     private JButton botonOpciones;
 
-    private JPanel contenedorJuego;
+    private ContenedorJuego contenedorJuego;
+    private GameLoop gameLoop;
 
     public PanelJuego() {
         
@@ -30,6 +36,7 @@ public class PanelJuego extends JPanel{
         botonMenu.setPreferredSize(dimensionBotonLateral);
         botonMenu.setMaximumSize(dimensionBotonLateral);
         botonMenu.setMinimumSize(dimensionBotonLateral);
+        botonMenu.setFocusable(false);
 
         botonOpciones = new JButton("Opciones");
         botonOpciones.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -39,7 +46,7 @@ public class PanelJuego extends JPanel{
         botonOpciones.setPreferredSize(dimensionBotonLateral);
         botonOpciones.setMaximumSize(dimensionBotonLateral);
         botonOpciones.setMinimumSize(dimensionBotonLateral);
-        
+        botonOpciones.setFocusable(false);
         
         lateral.add(Box.createVerticalStrut(50));
         
@@ -50,9 +57,56 @@ public class PanelJuego extends JPanel{
         this.add(lateral, BorderLayout.WEST);
 
 
-        contenedorJuego = new JPanel();
-        this.contenedorJuego.setBackground(Color.BLACK);
+
+        // 1. Cargar los obstáculos del nivel en el Mapa
+        Mapa.getInstance().cargarNivel(Niveles.NIVEL_1);
+        // 2. Crear el tanque del jugador
+        // Nota: Usamos una variable de instancia o local, pero lo importante es lo que sigue
+        TanqueJugador tanqueJugador = new TanqueJugador(50, 50);
+
+        // 3. Agregar el tanque a la lista del Mapa para que se dibuje
+        Mapa.getInstance().addObjeto(tanqueJugador); 
+
+
+
+
+        // 3.5 Prueba de subir de niveles el tanque
+        tanqueJugador.subirNivel();
+        tanqueJugador.subirNivel();
+
+        
+
+
+
+
+
+        // 4. Configurar el teclado (InputHandler)
+        ControladorInput input = new ControladorInput(tanqueJugador);
+        this.addKeyListener(input);
+
+        // 5. Inicializar la vista del juego
+        contenedorJuego = new ContenedorJuego();
         this.add(contenedorJuego, BorderLayout.CENTER);
+
+        // 6. Arrancar el motor (GameLoop)
+        gameLoop = new GameLoop(this);
+        gameLoop.iniciar();
+
+        // 7. Pedir foco (SIEMPRE AL FINAL)
+        this.setFocusable(true);
+        this.requestFocusInWindow();
+
+        this.addAncestorListener(new javax.swing.event.AncestorListener() {
+            @Override
+            public void ancestorAdded(javax.swing.event.AncestorEvent event) {
+                // Se ejecuta cuando el panel aparece en pantalla
+                event.getComponent().requestFocusInWindow();
+            }
+
+            @Override public void ancestorRemoved(javax.swing.event.AncestorEvent event) {}
+            @Override public void ancestorMoved(javax.swing.event.AncestorEvent event) {}
+        });
+
 
     }
 
@@ -63,6 +117,14 @@ public class PanelJuego extends JPanel{
 
     public JButton getBotonOpciones() {
         return this.botonOpciones;
+    }
+
+    public ContenedorJuego getContenedorJuego() {
+        return this.contenedorJuego;
+    }
+
+    public GameLoop getGameLoop() {
+        return this.gameLoop;
     }
 
 }
