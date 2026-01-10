@@ -17,11 +17,11 @@ public class EstadoNivel2 implements EstadoTanque{
     }
 
     public double getVelocidadMovimiento(){
-        return 0.35;
+        return 0.25;
     }
 
     public long getCooldownDisparo(){
-        return 700;
+        return 600;
     }
     
     public EstadoTanque getSiguienteEstado(){

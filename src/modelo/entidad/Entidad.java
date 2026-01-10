@@ -39,6 +39,22 @@ public abstract class Entidad extends GameObject implements Movible {
         this.yPrecisa = posY;
     }
 
+    @Override
+    public void recibirImpacto(Proyectil proyectil) {
+        this.destruir();
+        proyectil.destruir();
+    }
+
+    @Override
+    public void destruir() {
+        Thread hiloAnimacion = new Thread(new HiloAnimacionGrande(this.posX, this.posY));
+        hiloAnimacion.start();
+ 
+
+        System.out.println("Se destruyo la entidad");
+        this.existe = false;
+    }
+
     public void disparar() {
 
         ProyectilBasico proyectil;
@@ -48,8 +64,6 @@ public abstract class Entidad extends GameObject implements Movible {
         long tiempoActual = System.currentTimeMillis();
 
         if (tiempoActual - this.ultimoDisparoTime > getCooldownDisparo()) {
-
-            System.out.println("Disparo");
 
             switch (this.direccion) {
             case Direccion.ARRIBA:     spawnX += 6; spawnY += 0; break;

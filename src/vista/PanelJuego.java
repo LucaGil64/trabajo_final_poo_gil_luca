@@ -6,6 +6,7 @@ import javax.swing.*;
 import modelo.GameLoop;
 import modelo.Mapa;
 import modelo.Niveles;
+import modelo.entidad.enemigo.TanqueBasico;
 import modelo.entidad.jugador.TanqueJugador;
 
 public class PanelJuego extends JPanel{
@@ -60,9 +61,8 @@ public class PanelJuego extends JPanel{
 
         // 1. Cargar los obstáculos del nivel en el Mapa
         Mapa.getInstance().cargarNivel(Niveles.NIVEL_1);
-        // 2. Crear el tanque del jugador
-        // Nota: Usamos una variable de instancia o local, pero lo importante es lo que sigue
-        TanqueJugador tanqueJugador = new TanqueJugador(50, 50);
+        // 2. Crear el tanque del jugador, se usa una variable local pero es para testear
+        TanqueJugador tanqueJugador = new TanqueJugador(80, 200);
 
         // 3. Agregar el tanque a la lista del Mapa para que se dibuje
         Mapa.getInstance().addObjeto(tanqueJugador); 
@@ -70,11 +70,32 @@ public class PanelJuego extends JPanel{
 
 
 
-        // 3.5 Prueba de subir de niveles el tanque
-        tanqueJugador.subirNivel();
-        tanqueJugador.subirNivel();
+        // 3.25 Meter un enemigo
+        TanqueBasico tanqueBasico = new TanqueBasico(8, 8, 1.0, false);
+        Mapa.getInstance().addObjeto(tanqueBasico); 
 
-        
+        // TanqueBasico tanqueBasico1 = new TanqueBasico(8, 200, 1.0, false);
+        // Mapa.getInstance().addObjeto(tanqueBasico1); 
+
+        // TanqueBasico tanqueBasico2 = new TanqueBasico(30, 200, 1.0, false);
+        // Mapa.getInstance().addObjeto(tanqueBasico2); 
+
+        // TanqueBasico tanqueBasico3 = new TanqueBasico(50, 200, 1.0, false);
+        // Mapa.getInstance().addObjeto(tanqueBasico3); 
+
+        TanqueBasico tanqueBasico4 = new TanqueBasico(30, 8, 1.0, false);
+        Mapa.getInstance().addObjeto(tanqueBasico4); 
+
+        TanqueBasico tanqueBasico5 = new TanqueBasico(50, 8, 1.0, false);
+        Mapa.getInstance().addObjeto(tanqueBasico5); 
+
+
+        // 3.5 Prueba de subir de niveles el tanque
+
+
+        // tanqueJugador.subirNivel();
+        // tanqueJugador.subirNivel();
+        // tanqueJugador.subirNivel();
 
 
 
@@ -92,7 +113,7 @@ public class PanelJuego extends JPanel{
         gameLoop = new GameLoop(this);
         gameLoop.iniciar();
 
-        // 7. Pedir foco (SIEMPRE AL FINAL)
+        // 7. Pedir foco (SIEMPRE AL FINAL) - Para poder usar teclado
         this.setFocusable(true);
         this.requestFocusInWindow();
 

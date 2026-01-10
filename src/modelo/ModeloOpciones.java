@@ -1,5 +1,7 @@
 package modelo;
 
+import controlador.ControladorSonido;
+
 
 public class ModeloOpciones {
 
@@ -23,6 +25,7 @@ public class ModeloOpciones {
 
     public void setVolumen(int volumen) {
         this.volumen = volumen;
+        ControladorSonido.setVolumen(volumen);
     }
 
     public int getVolumen() {

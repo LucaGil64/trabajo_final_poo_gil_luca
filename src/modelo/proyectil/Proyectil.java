@@ -32,7 +32,7 @@ public abstract class Proyectil extends GameObject implements Movible{
 
     protected static int getAncho(Direccion direccion){
         if (direccion == direccion.ARRIBA || direccion == Direccion.ABAJO) {
-            return 3;
+            return 4;
         }
         else if (direccion == Direccion.IZQUIERDA || direccion == Direccion.DERECHA) {
             return 4;
@@ -45,7 +45,7 @@ public abstract class Proyectil extends GameObject implements Movible{
             return 4;
         }
         else if (direccion == Direccion.IZQUIERDA || direccion == Direccion.DERECHA) {
-            return 3;
+            return 4;
         }
         return 0;
     }
@@ -64,7 +64,10 @@ public abstract class Proyectil extends GameObject implements Movible{
     }
 
     public void destruir() {
-        System.out.println("Se destruyo el proyectil");
+        
+        Thread hiloAnimacion = new Thread(new HiloAnimacionProyectil(this.posX, this.posY));
+        hiloAnimacion.start();
+ 
         this.existe = false;
     }
 

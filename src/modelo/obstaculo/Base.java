@@ -1,6 +1,7 @@
 package modelo.obstaculo;
 
 import controlador.ControladorSprites;
+import modelo.entidad.HiloAnimacionGrande;
 
 public class Base extends Obstaculo{
 
@@ -16,6 +17,9 @@ public class Base extends Obstaculo{
 
     @Override
     public void destruir() {
+        Thread hiloAnimacion = new Thread(new HiloAnimacionGrande(this.posX, this.posY));
+        hiloAnimacion.start();
+        
         this.sprite = ControladorSprites.getSprite(48, 208, 16, 16);
         // TODO: Aca termina el juego (despues ver como hacer)
     }

@@ -11,7 +11,7 @@ public class TanqueJugador extends Entidad{
 
     public TanqueJugador (int posX, int posY) {
         
-        super(posX, posY, 16, 16, ControladorSprites.getSprite(0, 0, 16, 16), Direccion.ARRIBA, 0.3, 1, 800 , 0, false, null);
+        super(posX, posY, 16, 16, ControladorSprites.getSprite(0, 0, 16, 16), Direccion.ARRIBA, 0.2, 1, 800 , 0, false, null);
         
         
         this.estadoTanque = new EstadoNivel1();
