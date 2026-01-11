@@ -90,6 +90,12 @@ public abstract class TanqueEnemigo extends Entidad{
     }
 
     public void algoritmoDisparo() {
+
+        // Random random = new Random();
+        // float randomFloat = random.nextFloat();
+
+        // if (this.agresividadDisparos > randomFloat) this.disparar();
+
         this.disparar();
     }
 

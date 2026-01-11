@@ -6,10 +6,10 @@ import modelo.entidad.Entidad;
 import modelo.proyectil.Proyectil;
 import modelo.proyectil.ProyectilBasico;
 
-public class TanqueBasico extends TanqueEnemigo{
+public class TanqueRapido extends TanqueEnemigo{
 
-    public TanqueBasico(int posX, int posY, double agresividadDisparos, boolean dropPowerUp) {
-        super(posX, posY, ControladorSprites.getSprite(64, 64, 16, 16), 0.15, 1, 1200, 100, agresividadDisparos, dropPowerUp, null);
+    public TanqueRapido(int posX, int posY, double agresividadDisparos, boolean dropPowerUp) {
+        super(posX, posY, ControladorSprites.getSprite(64, 80, 16, 16), 0.3, 1, 1000, 200, agresividadDisparos, dropPowerUp, null);
 
 
 
@@ -25,15 +25,15 @@ public class TanqueBasico extends TanqueEnemigo{
 
     @Override
     protected void cargarSprites() {
-
+        
         if (this.dropPowerUp) {
 
-            int[] c = {0,128, 64,128, 32,128, 96,128};
+            int[] c = {0,144, 64,144, 32,144, 96,144};
             this.mapaSprites = this.asignarSprites(c[0], c[1], c[2], c[3], c[4], c[5], c[6], c[7]);
 
         } else {
 
-            int[] c = {0,64, 64,64, 32,64, 96,64};
+            int[] c = {0,80, 64,80, 32,80, 96,80};
             this.mapaSprites = this.asignarSprites(c[0], c[1], c[2], c[3], c[4], c[5], c[6], c[7]);
 
         }

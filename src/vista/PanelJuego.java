@@ -6,14 +6,20 @@ import javax.swing.*;
 import modelo.GameLoop;
 import modelo.Mapa;
 import modelo.Niveles;
+import modelo.entidad.enemigo.TanqueAltaCadencia;
 import modelo.entidad.enemigo.TanqueBasico;
+import modelo.entidad.enemigo.TanqueBlindado;
+import modelo.entidad.enemigo.TanqueRapido;
 import modelo.entidad.jugador.TanqueJugador;
+import vista.componentes.LabelLateral;
 
 public class PanelJuego extends JPanel{
 
     private JPanel lateral;
     private JButton botonMenu;
     private JButton botonOpciones;
+
+    private LabelLateral labelEnemigos, labelNumeroEnemigos, labelVidas, labelNumeroVidas, labelNivel, labelNumeroNivel, labelPuntos, labelNumeroPuntos;
 
     private ContenedorJuego contenedorJuego;
     private GameLoop gameLoop;
@@ -48,12 +54,44 @@ public class PanelJuego extends JPanel{
         botonOpciones.setMaximumSize(dimensionBotonLateral);
         botonOpciones.setMinimumSize(dimensionBotonLateral);
         botonOpciones.setFocusable(false);
+
+        labelEnemigos = new LabelLateral("Enemigos");
+        labelNumeroEnemigos = new LabelLateral("20");
+
+
+        labelVidas = new LabelLateral("Vidas");
+        labelNumeroVidas = new LabelLateral("3");
+
+        labelNivel = new LabelLateral("Nivel");
+        labelNumeroNivel = new LabelLateral("1");
+
+        labelPuntos = new LabelLateral("Puntos");
+        labelNumeroPuntos = new LabelLateral("0");
+
         
         lateral.add(Box.createVerticalStrut(50));
         
         lateral.add(botonMenu);
         lateral.add(Box.createVerticalStrut(15));
         lateral.add(botonOpciones);
+
+
+        lateral.add(Box.createVerticalGlue());
+
+
+        lateral.add(labelEnemigos);
+        lateral.add(labelNumeroEnemigos);
+        lateral.add(Box.createVerticalStrut(30));
+        lateral.add(labelVidas);
+        lateral.add(labelNumeroVidas);
+        lateral.add(Box.createVerticalStrut(30));
+        lateral.add(labelNivel);
+        lateral.add(labelNumeroNivel);
+        lateral.add(Box.createVerticalStrut(30));
+        lateral.add(labelPuntos);
+        lateral.add(labelNumeroPuntos);
+
+        lateral.add(Box.createVerticalStrut(50));
 
         this.add(lateral, BorderLayout.WEST);
 
@@ -74,20 +112,14 @@ public class PanelJuego extends JPanel{
         TanqueBasico tanqueBasico = new TanqueBasico(8, 8, 1.0, false);
         Mapa.getInstance().addObjeto(tanqueBasico); 
 
-        // TanqueBasico tanqueBasico1 = new TanqueBasico(8, 200, 1.0, false);
-        // Mapa.getInstance().addObjeto(tanqueBasico1); 
+        TanqueRapido tanqueRapido = new TanqueRapido(30, 8, 1.0, true);
+        Mapa.getInstance().addObjeto(tanqueRapido); 
 
-        // TanqueBasico tanqueBasico2 = new TanqueBasico(30, 200, 1.0, false);
-        // Mapa.getInstance().addObjeto(tanqueBasico2); 
+        TanqueAltaCadencia tanqueAltaCadencia = new TanqueAltaCadencia(50, 8, 1.0, true);
+        Mapa.getInstance().addObjeto(tanqueAltaCadencia); 
 
-        // TanqueBasico tanqueBasico3 = new TanqueBasico(50, 200, 1.0, false);
-        // Mapa.getInstance().addObjeto(tanqueBasico3); 
-
-        TanqueBasico tanqueBasico4 = new TanqueBasico(30, 8, 1.0, false);
-        Mapa.getInstance().addObjeto(tanqueBasico4); 
-
-        TanqueBasico tanqueBasico5 = new TanqueBasico(50, 8, 1.0, false);
-        Mapa.getInstance().addObjeto(tanqueBasico5); 
+        TanqueBlindado tanqueBlindado = new TanqueBlindado(70, 8, 1.0, false);
+        Mapa.getInstance().addObjeto(tanqueBlindado); 
 
 
         // 3.5 Prueba de subir de niveles el tanque

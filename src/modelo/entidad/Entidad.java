@@ -154,7 +154,7 @@ public abstract class Entidad extends GameObject implements Movible {
         this.moviendo = moviendo;
     }
 
-    public void asignarSprites(int arribaX, int arribaY, int abajoX, int abajoY, int izquierdaX, int izquierdaY, int derechaX, int derechaY) {
+    public Map<Direccion, BufferedImage> asignarSprites(int arribaX, int arribaY, int abajoX, int abajoY, int izquierdaX, int izquierdaY, int derechaX, int derechaY) {
         Map<Direccion, BufferedImage> sprites = new HashMap<>();
         
         sprites.put(Direccion.ARRIBA,    ControladorSprites.getSprite(arribaX, arribaY, 16, 16));
@@ -162,6 +162,6 @@ public abstract class Entidad extends GameObject implements Movible {
         sprites.put(Direccion.IZQUIERDA, ControladorSprites.getSprite(izquierdaX, izquierdaY, 16, 16));
         sprites.put(Direccion.DERECHA,   ControladorSprites.getSprite(derechaX, derechaY, 16, 16));
 
-        this.mapaSprites = sprites;
+        return sprites;
     }
 }

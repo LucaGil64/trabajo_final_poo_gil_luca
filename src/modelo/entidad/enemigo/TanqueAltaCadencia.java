@@ -4,12 +4,12 @@ import controlador.ControladorSprites;
 import modelo.Direccion;
 import modelo.entidad.Entidad;
 import modelo.proyectil.Proyectil;
-import modelo.proyectil.ProyectilBasico;
+import modelo.proyectil.ProyectilRapido;
 
-public class TanqueBasico extends TanqueEnemigo{
+public class TanqueAltaCadencia extends TanqueEnemigo{
 
-    public TanqueBasico(int posX, int posY, double agresividadDisparos, boolean dropPowerUp) {
-        super(posX, posY, ControladorSprites.getSprite(64, 64, 16, 16), 0.15, 1, 1200, 100, agresividadDisparos, dropPowerUp, null);
+    public TanqueAltaCadencia(int posX, int posY, double agresividadDisparos, boolean dropPowerUp) {
+        super(posX, posY, ControladorSprites.getSprite(64, 96, 16, 16), 0.20, 1, 600, 300, agresividadDisparos, dropPowerUp, null);
 
 
 
@@ -20,20 +20,20 @@ public class TanqueBasico extends TanqueEnemigo{
 
     @Override
     protected Proyectil crearProyectilEspecifico(int x, int y, Direccion direccion, Entidad dueño) {
-        return new ProyectilBasico(x, y, direccion, dueño);
+        return new ProyectilRapido(x, y, direccion, dueño);
     }
 
     @Override
     protected void cargarSprites() {
-
+        
         if (this.dropPowerUp) {
 
-            int[] c = {0,128, 64,128, 32,128, 96,128};
+            int[] c = {0,160, 64,160, 32,160, 96,160};
             this.mapaSprites = this.asignarSprites(c[0], c[1], c[2], c[3], c[4], c[5], c[6], c[7]);
 
         } else {
 
-            int[] c = {0,64, 64,64, 32,64, 96,64};
+            int[] c = {0,96, 64,96, 32,96, 96,96};
             this.mapaSprites = this.asignarSprites(c[0], c[1], c[2], c[3], c[4], c[5], c[6], c[7]);
 
         }
