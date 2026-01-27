@@ -62,7 +62,7 @@ public class GestorNiveles {
 
         // CONFIGURACION NIVEL 2
         Queue<TipoEnemigo> colaNivel2 = new LinkedList<TipoEnemigo>();
-        for (int i = 0; i < 5; i++) colaNivel2.offer(TipoEnemigo.BASICO);
+        for (int i = 0; i < 1; i++) colaNivel2.offer(TipoEnemigo.BASICO);
         // for (int i = 0; i < 5; i++) colaNivel2.offer(TipoEnemigo.RAPIDO);
         // for (int i = 0; i < 5; i++) colaNivel2.offer(TipoEnemigo.ALTA_CADENCIA);
         // for (int i = 0; i < 5; i++) colaNivel2.offer(TipoEnemigo.BLINDADO);
