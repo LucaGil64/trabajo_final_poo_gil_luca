@@ -5,7 +5,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import modelo.Direccion;
+import modelo.EstadoJuego;
 import modelo.entidad.Entidad;
+import modelo.entidad.HiloAnimacionGrande;
 import modelo.proyectil.Proyectil;
 
 public abstract class TanqueEnemigo extends Entidad{
@@ -49,6 +51,18 @@ public abstract class TanqueEnemigo extends Entidad{
         return this.velocidadMovimiento;
     }
 
+    @Override
+    public void destruir() {
+        Thread hiloAnimacion = new Thread(new HiloAnimacionGrande(this.posX, this.posY));
+        hiloAnimacion.start();
+ 
+
+        System.out.println("Se destruyo la entidad");
+        this.existe = false;
+
+        EstadoJuego.getInstance().sumarPuntos(this.puntosAlMorir);
+    }
+
 
 
     public void algoritmoMovimiento() {
@@ -65,7 +79,7 @@ public abstract class TanqueEnemigo extends Entidad{
         this.mover();
 
 
-        if (Math.abs(xPrecisa - xAntes) < 0.01 && Math.abs(yPrecisa - yAntes) < 0.01) {
+        if (Math.abs(xPrecisa - xAntes) < 0.01 && Math.abs(yPrecisa - yAntes) < 0.01 && pasosRestantes < 800) {
             cambiarDireccionRandom();
             this.pasosRestantes = 0;
         }

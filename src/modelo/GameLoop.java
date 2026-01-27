@@ -4,6 +4,7 @@ import controlador.ControladorSonido;
 import java.util.ArrayList;
 import modelo.entidad.Entidad;
 import modelo.entidad.enemigo.TanqueEnemigo;
+import modelo.nivel.GestorNiveles;
 import modelo.obstaculo.Obstaculo;
 import modelo.proyectil.Proyectil;
 import vista.PanelJuego;
@@ -49,8 +50,12 @@ public class GameLoop implements Runnable {
             actualizarImpactable();
             Mapa.getInstance().actualizarArrayList();
 
+            // 1.5. SPAWNER de enemigos
+            GestorNiveles.getInstance().actualizarSpawner();
+
             // 2. REDIBUJAR (Llama al paintComponent de ContenedorJuego)
             panelJuego.getContenedorJuego().repaint();
+            panelJuego.actualizarLabels();
 
             try {
                 Thread.sleep(4); // Le puse 4 pq a veces se ve trabado (lo de los FPS)

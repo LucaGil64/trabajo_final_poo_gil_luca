@@ -3,14 +3,10 @@ package vista;
 import controlador.ControladorInput;
 import java.awt.*;
 import javax.swing.*;
+import modelo.EstadoJuego;
 import modelo.GameLoop;
 import modelo.Mapa;
-import modelo.Niveles;
-import modelo.entidad.enemigo.TanqueAltaCadencia;
-import modelo.entidad.enemigo.TanqueBasico;
-import modelo.entidad.enemigo.TanqueBlindado;
-import modelo.entidad.enemigo.TanqueRapido;
-import modelo.entidad.jugador.TanqueJugador;
+import modelo.nivel.GestorNiveles;
 import vista.componentes.LabelLateral;
 
 public class PanelJuego extends JPanel{
@@ -97,55 +93,25 @@ public class PanelJuego extends JPanel{
 
 
 
-        // 1. Cargar los obstáculos del nivel en el Mapa
-        Mapa.getInstance().cargarNivel(Niveles.NIVEL_1);
-        // 2. Crear el tanque del jugador, se usa una variable local pero es para testear
-        TanqueJugador tanqueJugador = new TanqueJugador(80, 200);
+        // 1. Resetear todo y cargar el nivel 1
+        EstadoJuego.getInstance().resetearPartida();
+        GestorNiveles.getInstance().resetearNiveles();
+        GestorNiveles.getInstance().cargarNivelActual();
 
-        // 3. Agregar el tanque a la lista del Mapa para que se dibuje
-        Mapa.getInstance().addObjeto(tanqueJugador); 
-
-
-
-
-        // 3.25 Meter un enemigo
-        TanqueBasico tanqueBasico = new TanqueBasico(8, 8, 1.0, false);
-        Mapa.getInstance().addObjeto(tanqueBasico); 
-
-        TanqueRapido tanqueRapido = new TanqueRapido(30, 8, 1.0, true);
-        Mapa.getInstance().addObjeto(tanqueRapido); 
-
-        TanqueAltaCadencia tanqueAltaCadencia = new TanqueAltaCadencia(50, 8, 1.0, true);
-        Mapa.getInstance().addObjeto(tanqueAltaCadencia); 
-
-        TanqueBlindado tanqueBlindado = new TanqueBlindado(70, 8, 1.0, false);
-        Mapa.getInstance().addObjeto(tanqueBlindado); 
-
-
-        // 3.5 Prueba de subir de niveles el tanque
-
-
-        // tanqueJugador.subirNivel();
-        // tanqueJugador.subirNivel();
-        // tanqueJugador.subirNivel();
-
-
-
-
-
-        // 4. Configurar el teclado (InputHandler)
-        ControladorInput input = new ControladorInput(tanqueJugador);
+        // 2. Para poder moverse
+        ControladorInput input = new ControladorInput(Mapa.getInstance().getTanqueJugador());
         this.addKeyListener(input);
 
-        // 5. Inicializar la vista del juego
+
+        // 3. Inicializar la vista del juego
         contenedorJuego = new ContenedorJuego();
         this.add(contenedorJuego, BorderLayout.CENTER);
 
-        // 6. Arrancar el motor (GameLoop)
+        // 4. Arrancar el GameLoop
         gameLoop = new GameLoop(this);
         gameLoop.iniciar();
 
-        // 7. Pedir foco (SIEMPRE AL FINAL) - Para poder usar teclado
+        // 5. Pedir foco (SIEMPRE AL FINAL) - Para poder usar teclado
         this.setFocusable(true);
         this.requestFocusInWindow();
 
@@ -161,6 +127,22 @@ public class PanelJuego extends JPanel{
         });
 
 
+    }
+
+
+    public void actualizarLabels() {
+        int enemigosEnCola = GestorNiveles.getInstance().getDatosNivelActual().cuantosEnemigos();
+        int enemigosVivos = Mapa.getInstance().getCantidadEnemigosVivos();
+        int enemigosTotales = enemigosEnCola + enemigosVivos;
+
+        int vidas = EstadoJuego.getInstance().getVidas();
+        int nivel = GestorNiveles.getInstance().getNivelActual();
+        int puntos = EstadoJuego.getInstance().getPuntaje();
+        
+        this.labelNumeroEnemigos.setText(String.valueOf(enemigosTotales));
+        this.labelNumeroVidas.setText(String.valueOf(vidas));
+        this.labelNumeroNivel.setText(String.valueOf(nivel));
+        this.labelNumeroPuntos.setText(String.valueOf(puntos));
     }
 
 

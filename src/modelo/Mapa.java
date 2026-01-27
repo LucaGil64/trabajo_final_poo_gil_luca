@@ -2,6 +2,8 @@ package modelo;
 
 import java.awt.Graphics;
 import java.util.ArrayList;
+import modelo.entidad.enemigo.TanqueEnemigo;
+import modelo.entidad.jugador.TanqueJugador;
 import modelo.obstaculo.*;
 
 public class Mapa {
@@ -9,6 +11,8 @@ public class Mapa {
     // SINGLETON
     private static Mapa instance;
     private ArrayList<GameObject> objetos;
+
+    private TanqueJugador tanqueJugador;
     
     // Lista de espera para evitar choques de hilos al agregar cosas (proyectiles)
     private ArrayList<GameObject> objetosPendientes; 
@@ -18,6 +22,9 @@ public class Mapa {
     private Mapa() {
         objetos = new ArrayList<>();
         objetosPendientes = new ArrayList<>(); // Inicializamos la lista de espera
+
+        this.tanqueJugador = new TanqueJugador(80, 200);
+        this.objetos.add(tanqueJugador);
     }
 
     public static Mapa getInstance() {
@@ -28,8 +35,7 @@ public class Mapa {
     }
 
     public void cargarNivel(char[][] nivel) {
-        objetos.clear();
-        objetosPendientes.clear(); // Limpiamos pendientes por si acaso
+        this.limpiarMapa();
         
         for (int fila = 0; fila < nivel.length; fila++) {
             for (int col = 0; col < nivel[fila].length; col++) {
@@ -104,8 +110,41 @@ public class Mapa {
         this.objetosPendientes.add(obj);
     }
 
+    public void limpiarMapa() {
+        this.objetos.clear();
+        this.objetosPendientes.clear();
+
+        if (this.tanqueJugador != null) this.objetos.add(this.tanqueJugador);
+    }
+
+    public void respawnJugador(boolean murio) {
+
+        if (murio) this.tanqueJugador.resetearTotal();
+        else this.tanqueJugador.resetearPosicion();
+
+    }   
+
+
+    public int getCantidadEnemigosVivos() {
+        
+        int contador = 0;
+        for (GameObject obj : this.objetos) {
+            if (obj instanceof TanqueEnemigo && obj.getExiste()) {
+                contador++;
+            }
+        }
+        return contador;
+
+    }
+
+
+
     public ArrayList<GameObject> getObjetos() {
         return this.objetos;
+    }
+
+    public TanqueJugador getTanqueJugador() {
+        return this.tanqueJugador;
     }
 
 }

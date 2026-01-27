@@ -41,8 +41,15 @@ public abstract class Entidad extends GameObject implements Movible {
 
     @Override
     public void recibirImpacto(Proyectil proyectil) {
-        this.destruir();
+
+        this.vida--;
+
+        if (this.vida <= 0) {
+            this.destruir();
+        }
+
         proyectil.destruir();
+        
     }
 
     @Override
@@ -51,7 +58,6 @@ public abstract class Entidad extends GameObject implements Movible {
         hiloAnimacion.start();
  
 
-        System.out.println("Se destruyo la entidad");
         this.existe = false;
     }
 

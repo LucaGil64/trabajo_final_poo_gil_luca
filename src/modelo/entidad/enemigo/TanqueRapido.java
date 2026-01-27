@@ -9,7 +9,7 @@ import modelo.proyectil.ProyectilBasico;
 public class TanqueRapido extends TanqueEnemigo{
 
     public TanqueRapido(int posX, int posY, double agresividadDisparos, boolean dropPowerUp) {
-        super(posX, posY, ControladorSprites.getSprite(64, 80, 16, 16), 0.3, 1, 1000, 200, agresividadDisparos, dropPowerUp, null);
+        super(posX, posY, ControladorSprites.getSprite(64, 80, 16, 16), 0.25, 1, 1000, 200, agresividadDisparos, dropPowerUp, null);
 
 
 
