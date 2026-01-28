@@ -1,6 +1,7 @@
 package modelo;
 
 import java.awt.Graphics;
+import java.awt.Point;
 import java.util.ArrayList;
 import modelo.entidad.enemigo.TanqueEnemigo;
 import modelo.entidad.jugador.TanqueJugador;
@@ -18,6 +19,22 @@ public class Mapa {
     private ArrayList<GameObject> objetosPendientes; 
     
     private final int TILE_SIZE = 8;
+
+    private long finCongelamiento;
+    private long finConstruccion;
+    private boolean construccionActiva = false;
+
+    private final Point [] arrayCoordenadas = { // Coordenadas que rodean la base
+        new Point(96, 192),
+        new Point(104, 192),
+        new Point(112, 192),
+        new Point(120, 192),
+        new Point(96, 200),
+        new Point(120, 200),
+        new Point(96, 208),
+        new Point(120, 208)
+    };
+
 
     private Mapa() {
         objetos = new ArrayList<>();
@@ -43,8 +60,7 @@ public class Mapa {
                 int y = fila * TILE_SIZE;
                 char tipo = nivel[fila][col];
 
-                // ' ' = Nada, L = Ladrillo, A = Acero, B = Arbusto, W = Agua, H = Hielo, S = Base
-                // P = Spawn Jugador, E = Spawn Enemigo
+                // ' ' = Nada, L = Ladrillo, A = Acero, B = Arbusto, W = Agua, H = Hielo, S = Baseo
 
                 switch (tipo) {
                     case 'L': objetos.add(new Ladrillo(x, y)); break;
@@ -53,11 +69,6 @@ public class Mapa {
                     case 'W': objetos.add(new Agua(x, y)); break;
                     case 'H': objetos.add(new Hielo(x, y)); break;
                     case 'S': objetos.add(new Base(x, y)); break;
-                    
-                    case 'P': // Invocar lógica de spawn jugador
-                        break;
-                    case 'E': // Invocar EnemigoFactory
-                        break;
                 }
             }
         }
@@ -84,23 +95,31 @@ public class Mapa {
 
         ArrayList<GameObject> copiaSegura;
 
-        // "Congelamos" un instante para sacar una foto (copia) de la lista actual.
-        // Esto evita el error ConcurrentModificationException al pintar.
+        // "Congelamos" un instante para sacar una foto (copia) de la lista actual
+        // Esto evita el error ConcurrentModificationException al pintar
         synchronized (this) {
             copiaSegura = new ArrayList<>(this.objetos);
         }
 
         // Iteramos sobre la COPIA, no sobre la original
         for (GameObject obj: copiaSegura) {
-            if(obj.posZ == 0) obj.dibujar(g);
+            if(obj.posZ == 0) obj.dibujar(g); // Agua
         }
 
         for (GameObject obj: copiaSegura) {
-            if(obj.posZ == 1) obj.dibujar(g);
+            if(obj.posZ == 1) obj.dibujar(g); // Tanques, Proyectiles, Ladrillo, Aero, etc
         }
 
         for (GameObject obj: copiaSegura) {
-            if(obj.posZ == 2) obj.dibujar(g);
+            if(obj.posZ == 2) obj.dibujar(g); // Arbusto
+        }
+
+        for (GameObject obj: copiaSegura) {
+            if(obj.posZ == 3) obj.dibujar(g); // PowerUps
+        }
+    
+        for (GameObject obj: copiaSegura) {
+            if(obj.posZ == 4) obj.dibujar(g); // Animacion explosion grande y chica
         }
     }
 
@@ -135,6 +154,80 @@ public class Mapa {
         }
         return contador;
 
+    }
+
+
+    // POWER UP CONSTRUIR AL REDEDOR DE LA BASE
+    public void destruirObstaculoBase() {
+
+        for (GameObject obj : this.getObjetos()) {
+            if (obj instanceof Ladrillo || obj instanceof Acero) {
+                for (Point point : this.arrayCoordenadas) {
+                    if (obj.getBounds().x == point.x && obj.getBounds().y == point.y) {
+                        obj.destruir();
+                    }
+                }
+            }
+        }
+
+    }
+
+    public void construirAceroBase() {
+        for (Point point : this.arrayCoordenadas) {
+            Acero acero = new Acero(point.x, point.y);
+            this.addObjeto(acero);
+        }
+    }
+
+    public void construirLadrilloBase() {
+        for (Point point : this.arrayCoordenadas) {
+            Ladrillo ladrillo = new Ladrillo(point.x, point.y);
+            this.addObjeto(ladrillo);
+        }
+    }
+
+    public void activarConstruir(long duracion) {
+        this.finConstruccion = System.currentTimeMillis() + duracion;
+        this.construccionActiva = true;
+    }
+
+    public void actualizarConstruccion() {
+
+        if (construccionActiva) {
+            if (System.currentTimeMillis() > this.finConstruccion) {
+                this.destruirObstaculoBase();
+                this.construirLadrilloBase();
+                this.construccionActiva = false;
+            }
+        }
+
+    }
+
+    public Point [] getArrayCoordenadas() {
+        return this.arrayCoordenadas;
+    }
+
+
+
+    // POWER UP CONGELAR ENEMIGOS
+    public void activarCongelamiento(long duracion) {
+        this.finCongelamiento = System.currentTimeMillis() + duracion;
+    }
+
+    public boolean estanEnemigosCongelados() {
+        return System.currentTimeMillis() < this.finCongelamiento;
+    }
+
+
+    // POWER UP DESTUIR ENEMIGOS
+    public void destruirTanquesEnemigosVivos() {
+        for (GameObject obj : this.objetos) {
+            if (obj instanceof TanqueEnemigo) obj.destruir();
+        }
+    }
+
+    public void resetearPowerUpsActivos() {
+        this.finCongelamiento = System.currentTimeMillis();
     }
 
 

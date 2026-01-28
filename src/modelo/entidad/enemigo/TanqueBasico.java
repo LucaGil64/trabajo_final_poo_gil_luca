@@ -15,6 +15,7 @@ public class TanqueBasico extends TanqueEnemigo{
 
 
         this.cargarSprites();
+        setDireccion(this.direccion);
     }
 
 

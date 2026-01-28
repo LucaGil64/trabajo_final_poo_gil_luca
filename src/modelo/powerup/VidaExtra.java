@@ -1,17 +1,18 @@
 package modelo.powerup;
 
-import java.awt.image.BufferedImage;
+import controlador.ControladorSprites;
+import modelo.EstadoJuego;
 import modelo.entidad.jugador.TanqueJugador;
 
 public class VidaExtra extends PowerUp{
 
-    public VidaExtra(int posX, int posY, int posZ, int ancho, int alto, BufferedImage sprite, int puntosAlActivar) {
-        super(posX, posY, posZ, ancho, alto, sprite, puntosAlActivar);
+    public VidaExtra(int posX, int posY) {
+        super(posX, posY, ControladorSprites.getSprite(80, 192, 16, 16), 600);
     }
 
     @Override
     public void activar(TanqueJugador tanqueJugador) {
-
+        EstadoJuego.getInstance().ganarVida();
     }
 
 }

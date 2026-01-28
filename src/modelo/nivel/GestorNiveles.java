@@ -42,7 +42,7 @@ public class GestorNiveles {
         this.nivelActual = 1;
         this.juegoTerminado = false;
 
-        this.ultimoTiempoSpawn = 0;
+        this.ultimoTiempoSpawn = System.currentTimeMillis();
         this.esperandoTransicion = false;
 
         inicializarNiveles();
@@ -53,7 +53,7 @@ public class GestorNiveles {
 
         // CONFIGURACION NIVEL 1
         Queue<TipoEnemigo> colaNivel1 = new LinkedList<TipoEnemigo>();
-        // for (int i = 0; i < 16; i++) colaNivel1.offer(TipoEnemigo.BASICO);
+        for (int i = 0; i < 16; i++) colaNivel1.offer(TipoEnemigo.BASICO);
         for (int i = 0; i < 1; i++) colaNivel1.offer(TipoEnemigo.RAPIDO);
         DatosNivel nivel1 = new DatosNivel(Niveles.NIVEL_1, colaNivel1, 4000);
 
@@ -85,7 +85,9 @@ public class GestorNiveles {
 
 
     public void cargarNivelActual() {
-        this.ultimoTiempoSpawn = 0; // Para que siempre aparezca rapido al principio
+        Mapa.getInstance().resetearPowerUpsActivos(); // Para desactivar los powerUps activos una vez se paso al sig nivel
+
+        this.ultimoTiempoSpawn = System.currentTimeMillis(); // Para que siempre aparezca rapido al principio
 
         if (this.nivelActual - 1 >= this.listaNiveles.size()) {
             this.nivelActual--; // Para que no se vea mal en el label
@@ -154,7 +156,8 @@ public class GestorNiveles {
         }
 
         TipoEnemigo tipo = datos.obtenerSiguienteEnemigo();
-        TanqueEnemigo nuevoEnemigo = EnemigoFactory.crearEnemigo(tipo, xValida, 8, false);
+        boolean powerUp =  (random.nextInt(20) < 20); // TODO: DSP CAMBIAR EL PORCENTAJE Y PONER (4) -> 20% de que sea true el powerUp
+        TanqueEnemigo nuevoEnemigo = EnemigoFactory.crearEnemigo(tipo, xValida, 8, powerUp);
         Mapa.getInstance().addObjeto(nuevoEnemigo);
     }
 

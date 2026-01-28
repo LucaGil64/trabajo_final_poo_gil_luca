@@ -21,7 +21,7 @@ public class HiloAnimacionGrande extends Obstaculo implements Runnable{
     private static BufferedImage img6 = ControladorSprites.getSprite(32 , 224, 16, 16);
 
     public HiloAnimacionGrande(int posX, int posY) {
-        super(posX, posY, 2, 16, 16, ControladorSprites.getSprite(0, 224, 16, 16), false, false, false);
+        super(posX, posY, 4, 16, 16, ControladorSprites.getSprite(0, 224, 16, 16), false, false, false);
         this.posX = posX;
         this.posY = posY;
 

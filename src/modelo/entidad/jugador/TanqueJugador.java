@@ -12,6 +12,8 @@ public class TanqueJugador extends Entidad{
 
     EstadoTanque estadoTanque;
 
+    private long finInvencibilidad;
+
     public TanqueJugador (int posX, int posY) {
         
         super(posX, posY, 16, 16, ControladorSprites.getSprite(0, 0, 16, 16), Direccion.ARRIBA, 0.2, 1, 800 , 1, false, null);
@@ -25,6 +27,8 @@ public class TanqueJugador extends Entidad{
         System.out.println("nivel subido");
         this.estadoTanque = this.estadoTanque.getSiguienteEstado();
         this.cargarSprites();
+        
+        setDireccion(this.direccion); // Para que se actualize al instante el nuevo sprite
     }
 
 
@@ -59,6 +63,8 @@ public class TanqueJugador extends Entidad{
 
     @Override
     public void destruir() {
+        if (this.esInvencible()) return; // Si es invencible no se destruye nada
+
         Thread hiloAnimacion = new Thread(new HiloAnimacionGrande(this.posX, this.posY));
         hiloAnimacion.start();
 
@@ -101,8 +107,15 @@ public class TanqueJugador extends Entidad{
         this.posY = 200;
         this.yPrecisa = 200;
 
-        this.direccion = Direccion.ARRIBA; // TODO: VER CUAL DE LOS 2 ES NECESARIO
-        this.setDireccion(Direccion.ARRIBA);
+        setDireccion(Direccion.ARRIBA);
+    }
+
+    public void activarInvencibilidad(long duracion) {
+        this.finInvencibilidad = System.currentTimeMillis() + duracion;
+    }
+
+    public boolean esInvencible() {
+        return System.currentTimeMillis() < this.finInvencibilidad;
     }
 
 }

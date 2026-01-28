@@ -6,6 +6,7 @@ import modelo.entidad.Entidad;
 import modelo.entidad.enemigo.TanqueEnemigo;
 import modelo.nivel.GestorNiveles;
 import modelo.obstaculo.Obstaculo;
+import modelo.powerup.PowerUp;
 import modelo.proyectil.Proyectil;
 import vista.PanelJuego;
 
@@ -48,6 +49,7 @@ public class GameLoop implements Runnable {
             // 1. ACTUALIZAR LOGICA (Movimiento)    En teoria despues mover todo esto a Mapa
             actualizarMovible();
             actualizarImpactable();
+            actualizarPowerUps();
             Mapa.getInstance().actualizarArrayList();
 
             // 1.5. SPAWNER de enemigos
@@ -65,6 +67,28 @@ public class GameLoop implements Runnable {
         }
     }
 
+
+    private void actualizarPowerUps() {
+        // Para el powerUp construir
+        Mapa.getInstance().actualizarConstruccion();
+
+        for (GameObject obj : Mapa.getInstance().getObjetos()) {
+            
+            if (obj instanceof PowerUp) {
+                // Para destruir cuando pasen mas de 10 segundos en el piso
+                ((PowerUp) obj).vefiricarTiempoVida();
+
+                // Colision jugador - powerUp
+                if (obj.getBounds().intersects(Mapa.getInstance().getTanqueJugador().getBounds())) {
+                    obj.destruir();
+                    ((PowerUp) obj).activar(Mapa.getInstance().getTanqueJugador());
+                    EstadoJuego.getInstance().sumarPuntos(((PowerUp) obj).getPuntosAlActivar());
+                }
+            }
+
+        }
+    }
+
     private void actualizarMovible() {
         // Recorremos todos los objetos del mapa que implementan Movible
         for (GameObject obj : Mapa.getInstance().getObjetos()) {
@@ -72,8 +96,12 @@ public class GameLoop implements Runnable {
             if (obj instanceof Movible) {
                 // CASO 1: Si es un Enemigo, dejamos que su algoritmo controle todo (movimiento y disparo)
                 if (obj instanceof TanqueEnemigo) {
-                    ((TanqueEnemigo) obj).algoritmoDisparo();
-                    ((TanqueEnemigo) obj).algoritmoMovimiento(); // Este ya incluye el mover() adentro
+                    // Chequea que el powerUp de congelar enemigos no este activo
+                    if (!Mapa.getInstance().estanEnemigosCongelados()) {
+                        ((TanqueEnemigo) obj).algoritmoDisparo();
+                        ((TanqueEnemigo) obj).algoritmoMovimiento(); // Este ya incluye el mover() adentro
+                    }
+                    
                 } 
                 // CASO 2: Si NO es enemigo (Jugador, Bala), usamos el movimiento estándar
                 else {

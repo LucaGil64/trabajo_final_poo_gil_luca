@@ -1,12 +1,12 @@
 package modelo.powerup;
 
-import java.awt.image.BufferedImage;
+import controlador.ControladorSprites;
 import modelo.entidad.jugador.TanqueJugador;
 
 public class MaximoNivel extends PowerUp{
 
-    public MaximoNivel(int posX, int posY, int posZ, int ancho, int alto, BufferedImage sprite, int puntosAlActivar) {
-        super(posX, posY, posZ, ancho, alto, sprite, 1000);
+    public MaximoNivel(int posX, int posY) {
+        super(posX, posY, ControladorSprites.getSprite(96, 192, 16, 16), 800);
     }
 
     @Override

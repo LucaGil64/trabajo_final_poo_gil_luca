@@ -1,17 +1,22 @@
 package modelo.powerup;
 
-import java.awt.image.BufferedImage;
+import controlador.ControladorSprites;
+import modelo.Mapa;
 import modelo.entidad.jugador.TanqueJugador;
 
 public class Construir extends PowerUp{
 
-    public Construir(int posX, int posY, int posZ, int ancho, int alto, BufferedImage sprite, int puntosAlActivar) {
-        super(posX, posY, posZ, ancho, alto, sprite, puntosAlActivar);
+    public Construir(int posX, int posY) {
+        super(posX, posY, ControladorSprites.getSprite(32, 192, 16, 16), 400);
     }
 
     @Override
     public void activar(TanqueJugador tanqueJugador) {
-
+        Mapa.getInstance().destruirObstaculoBase();
+        Mapa.getInstance().construirAceroBase();
+        Mapa.getInstance().activarConstruir(10000);
     }
+
+
 
 }

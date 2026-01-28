@@ -6,8 +6,10 @@ import java.util.Map;
 import java.util.Random;
 import modelo.Direccion;
 import modelo.EstadoJuego;
+import modelo.Mapa;
 import modelo.entidad.Entidad;
 import modelo.entidad.HiloAnimacionGrande;
+import modelo.powerup.PowerUpFactory;
 import modelo.proyectil.Proyectil;
 
 public abstract class TanqueEnemigo extends Entidad{
@@ -61,6 +63,10 @@ public abstract class TanqueEnemigo extends Entidad{
         this.existe = false;
 
         EstadoJuego.getInstance().sumarPuntos(this.puntosAlMorir);
+
+        if (this.dropPowerUp) {
+            Mapa.getInstance().addObjeto(PowerUpFactory.crearPowerUp());
+        }
     }
 
 

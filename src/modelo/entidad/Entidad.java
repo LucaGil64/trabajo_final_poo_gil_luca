@@ -63,6 +63,8 @@ public abstract class Entidad extends GameObject implements Movible {
 
     public void disparar() {
 
+        if (!this.existe) return;
+
         ProyectilBasico proyectil;
         int spawnX = this.posX;
         int spawnY = this.posY;
@@ -91,9 +93,9 @@ public abstract class Entidad extends GameObject implements Movible {
     @Override
     public void mover() {
 
-        if (!moviendo) {
-            return;
-        }
+        if (!this.existe) return;
+
+        if (!moviendo) return;
 
         double intentoX = this.xPrecisa;
         double intentoY = this.yPrecisa;

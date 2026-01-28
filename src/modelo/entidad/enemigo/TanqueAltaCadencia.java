@@ -15,6 +15,7 @@ public class TanqueAltaCadencia extends TanqueEnemigo{
 
 
         this.cargarSprites();
+        setDireccion(this.direccion);
     }
 
 

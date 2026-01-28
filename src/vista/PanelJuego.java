@@ -97,6 +97,7 @@ public class PanelJuego extends JPanel{
         EstadoJuego.getInstance().resetearPartida();
         GestorNiveles.getInstance().resetearNiveles();
         GestorNiveles.getInstance().cargarNivelActual();
+        Mapa.getInstance().getTanqueJugador().resetearTotal();
 
         // 2. Para poder moverse
         ControladorInput input = new ControladorInput(Mapa.getInstance().getTanqueJugador());

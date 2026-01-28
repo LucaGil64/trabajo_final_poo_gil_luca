@@ -1,12 +1,12 @@
 package modelo.powerup;
 
-import java.awt.image.BufferedImage;
+import controlador.ControladorSprites;
 import modelo.entidad.jugador.TanqueJugador;
 
 public class SubirNivel extends PowerUp{
 
-    public SubirNivel(int posX, int posY, int posZ, int ancho, int alto, BufferedImage sprite, int puntosAlActivar) {
-        super(posX, posY, posZ, ancho, alto, sprite, 500);
+    public SubirNivel(int posX, int posY) {
+        super(posX, posY, ControladorSprites.getSprite(48, 192, 16, 16), 500);
     }
 
     @Override
