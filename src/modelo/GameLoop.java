@@ -1,13 +1,16 @@
 package modelo;
 
+import controlador.ControladorFinJuego;
 import controlador.ControladorSonido;
 import java.util.ArrayList;
+import javax.swing.SwingUtilities;
 import modelo.entidad.Entidad;
 import modelo.entidad.enemigo.TanqueEnemigo;
 import modelo.nivel.GestorNiveles;
 import modelo.obstaculo.Obstaculo;
 import modelo.powerup.PowerUp;
 import modelo.proyectil.Proyectil;
+import vista.PanelFinJuego;
 import vista.PanelJuego;
 
 public class GameLoop implements Runnable {
@@ -15,6 +18,10 @@ public class GameLoop implements Runnable {
     private boolean ejecutando = false;
     private Thread hiloPrincipal;
     private PanelJuego panelJuego;
+
+    private ControladorFinJuego controladorFinJuego;
+    private PanelFinJuego panelFinJuego;
+    private boolean flagUnicaVez = true;
 
     public GameLoop(PanelJuego panelJuego) {
         this.panelJuego = panelJuego;
@@ -46,6 +53,9 @@ public class GameLoop implements Runnable {
     @Override
     public void run() {
         while (ejecutando) {
+            // 0. CHEQUEAR SI SE TERMINO EL JUEGO
+            checkFinJuego();
+
             // 1. ACTUALIZAR LOGICA (Movimiento)    En teoria despues mover todo esto a Mapa
             actualizarMovible();
             actualizarImpactable();
@@ -64,6 +74,25 @@ public class GameLoop implements Runnable {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+
+    private void checkFinJuego() {
+        if (!EstadoJuego.getInstance().getJugando() && flagUnicaVez) {
+            //this.ejecutando = false; // TODO: REVEER
+            System.out.println("JUEGO TERMINADO - PUNTUACION FINAL: " + EstadoJuego.getInstance().getPuntaje());
+
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                  // Todo lo que pongas aquí se ejecutará en el hilo de la vista
+                    PanelFinJuego panelFinJuego = new PanelFinJuego();
+                    ControladorFinJuego controladorFinJuego = new ControladorFinJuego(panelFinJuego, panelJuego);
+                }
+            });
+            
+            this.flagUnicaVez = false; // Para que no entre en un bucle infinito
         }
     }
 

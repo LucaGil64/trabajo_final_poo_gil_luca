@@ -73,9 +73,8 @@ public class TanqueJugador extends Entidad{
 
         System.out.println("Se destruyo al TanqueJugador");
         
-        if (EstadoJuego.getInstance().esGameOver()) {
-            System.out.println("GAME OVER - PUNTUACION FINAL: " + EstadoJuego.getInstance().getPuntaje());
-
+        if (EstadoJuego.getInstance().getVidas() <= 0 && EstadoJuego.getInstance().getJugando()) {
+            EstadoJuego.getInstance().setJugando(false);
         } else {
             Mapa.getInstance().respawnJugador(true);
         }

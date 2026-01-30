@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
+import modelo.EstadoJuego;
 import modelo.GameObject;
 import modelo.Mapa;
 import modelo.entidad.enemigo.EnemigoFactory;
@@ -24,7 +25,6 @@ public class GestorNiveles {
 
     private ArrayList<DatosNivel> listaNiveles;
     private int nivelActual;
-    private boolean juegoTerminado;
 
     private long ultimoTiempoSpawn;
     private final int MAX_ENEMIGOS_SIMULTANEOS = 5;
@@ -40,7 +40,6 @@ public class GestorNiveles {
     public void resetearNiveles() {
         this.listaNiveles = new ArrayList<>();
         this.nivelActual = 1;
-        this.juegoTerminado = false;
 
         this.ultimoTiempoSpawn = System.currentTimeMillis();
         this.esperandoTransicion = false;
@@ -54,7 +53,7 @@ public class GestorNiveles {
         // CONFIGURACION NIVEL 1
         Queue<TipoEnemigo> colaNivel1 = new LinkedList<TipoEnemigo>();
         for (int i = 0; i < 16; i++) colaNivel1.offer(TipoEnemigo.BASICO);
-        for (int i = 0; i < 1; i++) colaNivel1.offer(TipoEnemigo.RAPIDO);
+        for (int i = 0; i < 4; i++) colaNivel1.offer(TipoEnemigo.RAPIDO);
         DatosNivel nivel1 = new DatosNivel(Niveles.NIVEL_1, colaNivel1, 4000);
 
         this.listaNiveles.add(nivel1);
@@ -62,10 +61,10 @@ public class GestorNiveles {
 
         // CONFIGURACION NIVEL 2
         Queue<TipoEnemigo> colaNivel2 = new LinkedList<TipoEnemigo>();
-        for (int i = 0; i < 1; i++) colaNivel2.offer(TipoEnemigo.BASICO);
-        // for (int i = 0; i < 5; i++) colaNivel2.offer(TipoEnemigo.RAPIDO);
-        // for (int i = 0; i < 5; i++) colaNivel2.offer(TipoEnemigo.ALTA_CADENCIA);
-        // for (int i = 0; i < 5; i++) colaNivel2.offer(TipoEnemigo.BLINDADO);
+        for (int i = 0; i < 5; i++) colaNivel2.offer(TipoEnemigo.BASICO);
+        for (int i = 0; i < 5; i++) colaNivel2.offer(TipoEnemigo.RAPIDO);
+        for (int i = 0; i < 5; i++) colaNivel2.offer(TipoEnemigo.ALTA_CADENCIA);
+        for (int i = 0; i < 5; i++) colaNivel2.offer(TipoEnemigo.BLINDADO);
         DatosNivel nivel2 = new DatosNivel(Niveles.NIVEL_2, colaNivel2, 4000);
 
         this.listaNiveles.add(nivel2);
@@ -73,9 +72,9 @@ public class GestorNiveles {
 
         // CONFIGURACION NIVEL 3
         Queue<TipoEnemigo> colaNivel3 = new LinkedList<TipoEnemigo>();
-        for (int i = 0; i < 2; i++) colaNivel3.offer(TipoEnemigo.RAPIDO);
-        // for (int i = 0; i < 7; i++) colaNivel3.offer(TipoEnemigo.ALTA_CADENCIA);
-        // for (int i = 0; i < 6; i++) colaNivel3.offer(TipoEnemigo.BLINDADO);
+        for (int i = 0; i < 7; i++) colaNivel3.offer(TipoEnemigo.RAPIDO);
+        for (int i = 0; i < 7; i++) colaNivel3.offer(TipoEnemigo.ALTA_CADENCIA);
+        for (int i = 0; i < 6; i++) colaNivel3.offer(TipoEnemigo.BLINDADO);
         DatosNivel nivel3 = new DatosNivel(Niveles.NIVEL_3, colaNivel3, 4000);
 
         this.listaNiveles.add(nivel3);
@@ -89,10 +88,9 @@ public class GestorNiveles {
 
         this.ultimoTiempoSpawn = System.currentTimeMillis(); // Para que siempre aparezca rapido al principio
 
-        if (this.nivelActual - 1 >= this.listaNiveles.size()) {
+        if (this.nivelActual - 1 >= this.listaNiveles.size() && EstadoJuego.getInstance().getJugando()) {
             this.nivelActual--; // Para que no se vea mal en el label
-            System.out.println("JUEGO TERMINADO, GANASTE!!");
-            juegoTerminado = true;
+            EstadoJuego.getInstance().setJugando(false);
             return;
         }
 
@@ -110,7 +108,7 @@ public class GestorNiveles {
 
 
     public void actualizarSpawner() {
-        if (juegoTerminado) return;
+        if (!EstadoJuego.getInstance().getJugando()) return;
 
         DatosNivel datos = this.listaNiveles.get(this.nivelActual - 1);
         long tiempoActual = System.currentTimeMillis();
@@ -156,7 +154,7 @@ public class GestorNiveles {
         }
 
         TipoEnemigo tipo = datos.obtenerSiguienteEnemigo();
-        boolean powerUp =  (random.nextInt(20) < 20); // TODO: DSP CAMBIAR EL PORCENTAJE Y PONER (4) -> 20% de que sea true el powerUp
+        boolean powerUp =  (random.nextInt(20) < 4); // TODO: DSP CAMBIAR EL PORCENTAJE Y PONER (4) -> 20% de que sea true el powerUp
         TanqueEnemigo nuevoEnemigo = EnemigoFactory.crearEnemigo(tipo, xValida, 8, powerUp);
         Mapa.getInstance().addObjeto(nuevoEnemigo);
     }

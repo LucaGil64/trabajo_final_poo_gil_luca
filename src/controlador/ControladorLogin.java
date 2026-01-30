@@ -2,6 +2,7 @@ package controlador;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import modelo.EstadoJuego;
 import vista.PanelJuego;
 import vista.PanelLogin;
 import vista.PanelMenu;
@@ -43,6 +44,9 @@ public class ControladorLogin implements ActionListener{
 
         this.panelLogin.getBotonLogin().addActionListener(e -> {
             System.out.println("Boton login");
+
+            EstadoJuego.getInstance().setNombreJugador(panelLogin.getTextFieldLogin().getText());
+
             panelJuego = new PanelJuego();
             controladorJuego = new ControladorJuego(panelJuego);
         });

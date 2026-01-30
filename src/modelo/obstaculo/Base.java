@@ -1,6 +1,7 @@
 package modelo.obstaculo;
 
 import controlador.ControladorSprites;
+import modelo.EstadoJuego;
 import modelo.entidad.HiloAnimacionGrande;
 
 public class Base extends Obstaculo{
@@ -21,7 +22,7 @@ public class Base extends Obstaculo{
         hiloAnimacion.start();
         
         this.sprite = ControladorSprites.getSprite(48, 208, 16, 16);
-        // TODO: Aca termina el juego (despues ver como hacer)
+        if (EstadoJuego.getInstance().getJugando()) EstadoJuego.getInstance().setJugando(false);
     }
 
 }
