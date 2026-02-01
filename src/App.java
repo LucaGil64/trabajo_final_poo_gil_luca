@@ -14,5 +14,8 @@ public class App {
             ControladorVistaPrincipal controladorVistaPrincipal = new ControladorVistaPrincipal();
             
         });
+
+        // JugadorDAOImpl jugadorDAO = new JugadorDAOImpl();
+        // jugadorDAO.clear();
     }
 }

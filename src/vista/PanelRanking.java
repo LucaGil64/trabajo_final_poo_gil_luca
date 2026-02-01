@@ -88,4 +88,8 @@ public class PanelRanking extends JPanel{
         this.add(scrollPane);
     }
 
+    public DefaultTableModel getModelo() {
+        return this.modelo;
+    }
+
 }

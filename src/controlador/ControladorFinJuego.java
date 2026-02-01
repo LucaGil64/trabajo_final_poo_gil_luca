@@ -1,5 +1,7 @@
 package controlador;
 
+import db.Jugador;
+import db.JugadorDAOImpl;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JDialog;
@@ -34,6 +36,13 @@ public class ControladorFinJuego implements ActionListener{
 
         System.out.println(EstadoJuego.getInstance().getNombreJugador());
         this.panelFinJuego.setDatos(EstadoJuego.getInstance().getNombreJugador(), EstadoJuego.getInstance().getPuntaje());
+
+        Jugador jugador = new Jugador();
+        jugador.setNombre(EstadoJuego.getInstance().getNombreJugador());
+        jugador.setPuntos(EstadoJuego.getInstance().getPuntaje());
+
+        JugadorDAOImpl jugadorDAO = new JugadorDAOImpl();
+        jugadorDAO.insertar(jugador);
 
 
         this.panelFinJuego.getBotonMenu().addActionListener(e -> {

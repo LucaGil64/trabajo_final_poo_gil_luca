@@ -1,7 +1,11 @@
 package controlador;
 
+import db.Jugador;
+import db.JugadorDAOImpl;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import modelo.EstadoJuego;
 import vista.PanelJuego;
 import vista.PanelLogin;
@@ -43,12 +47,36 @@ public class ControladorLogin implements ActionListener{
         });
 
         this.panelLogin.getBotonLogin().addActionListener(e -> {
-            System.out.println("Boton login");
 
-            EstadoJuego.getInstance().setNombreJugador(panelLogin.getTextFieldLogin().getText());
 
-            panelJuego = new PanelJuego();
-            controladorJuego = new ControladorJuego(panelJuego);
+            JugadorDAOImpl jugadorDao = new JugadorDAOImpl();
+            ArrayList<Jugador> jugadoresTop10 = jugadorDao.top10();
+            boolean nombreYaUsado = false;
+
+
+            for (Jugador jugador : jugadoresTop10) {
+                if (jugador.getNombre().equals(panelLogin.getTextFieldLogin().getText())) {
+                    nombreYaUsado = true;
+                    break;
+                }
+            }
+
+            if (panelLogin.getTextFieldLogin().getText().isBlank() || panelLogin.getTextFieldLogin().getText().length() <= 3) {
+                JOptionPane.showMessageDialog(panelLogin, "Ingresa un nombre de usuario valido", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            else if (nombreYaUsado) {
+                JOptionPane.showMessageDialog(panelLogin, "Nombre de usuario no disponible", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            else {
+
+                System.out.println("Boton login");
+                EstadoJuego.getInstance().setNombreJugador(panelLogin.getTextFieldLogin().getText());
+                panelJuego = new PanelJuego();
+                controladorJuego = new ControladorJuego(panelJuego);
+
+            }
+
+
         });
 
 
